@@ -5,7 +5,9 @@ import {AuthProvider} from './AuthProvider';
 function App() {
   return (
     <div className="App">
-      <AuthProvider />
+      <div className='App-header'>
+        <AuthProvider />
+      </div>
     </div>
   );
 }
