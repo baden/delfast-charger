@@ -1,22 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { getAuth, signInWithPopup, signOut } from "firebase/auth";
-import { app, googleProvider } from "./firebase";
+// import { getAuth, signInWithPopup, signOut } from "firebase/auth";
+// import { app, googleProvider } from "./firebase";
+import firebase from "./firebase";
 
 export const AuthProvider = ({ children }) => {
-    const auth = getAuth(app);
-    const [user, setUser] = useState(auth.currentUser);
+    // const auth = getAuth(app);
+    const [user, setUser] = useState(firebase.getCurrentUser());
 
     const signOutUser = () => {
         console.log("signOutUser", user);
-        signOut(auth).then(() => {
-            // Sign-out successful.
-          }).catch((error) => {
-            // An error happened.
-          });
+        firebase.signOut();
     }
 
     const signInUser = () => {
-        signInWithPopup(auth, googleProvider).then((result) => {
+        firebase.signInWithGoogle().then((result) => {
             console.log("Auth succeed result", result);
             // // This gives you a Google Access Token. You can use it to access the Google API.
             // const credential = GoogleAuthProvider.credentialFromResult(result);
@@ -39,21 +36,18 @@ export const AuthProvider = ({ children }) => {
     }
     
     useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged((user) => {
+        const unsubscribe = firebase.onAuthStateChanged((user) => {
             console.log("onAuthStateChanged", user);
             setUser(user);
-            if(!user) {
-                // auth.signInAnonymously();
-                // signInUser();
-            }
         });
         return unsubscribe;
-    }, [auth]);
+    }, []);
     
     if (!user) {
         return <div>
-            Loading...
-            <button onClick={signInUser}>Sign in</button>
+            You must be signed in for using this app
+            <br/>
+            <img alt="Google" src="https://developers.google.com/identity/images/btn_google_signin_dark_normal_web.png" onClick={signInUser} style={{cursor:'pointer'}} />
         </div>;
     }
     
