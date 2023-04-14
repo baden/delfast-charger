@@ -1,0 +1,48 @@
+#cloud-config
+
+package_update: true
+package_upgrade: true
+
+packages:
+  # - fail2ban
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - gnupg-agent
+  - software-properties-common
+  - ufw
+  - mosquitto
+  - mosquitto-clients
+  - docker.io
+  - docker-compose
+
+groups:
+  - docker
+
+users:
+  - name: baden
+    groups: users, admin
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCin+5nnsY5/3YGpKaFAvVFVTyZZab25QRrJClDn1onZc4bG4iGigP7D81PsUL713N4CZAh3cHhmy4QSgYoEHwpREsG55k1Io9Z5XywyvEM1Xf1BPVzDcBydyqC6GXuQc4l8Igx8iM5jE4sYgTlbPAUdxNbNp2vcBAXNYQ1o60aHuHCWstNVci0/ydJ60rhiX6GKRdRby1+WhQx6e9kxm9OglKJIrHiLtVNcka9tKbT51qFxDk5L2Z2qjec5qptjmPWfqgOSwxhYo6CSOAF6uWyMPjkuBDtG5FYSqDHnZuGpfgMrYaPg08yGgUWCWUdIwCdvsfVblD5FM8uSp2P2Cikre8TZ1Ef6hlZDwghb24mh4C4mIgCCZ+q/eeH/Z9Lej0+MjI3T2UEhmva6I8kXPeUwPrQf7Je13ikH8Z1PgySdVjgfVleodvQUV6RCL/pSfXV8UUCwM8mGAqYLpCXEA4s2qoplthh11/jIfzJR0Psu61JOh9CMYPz4OWUnoIu05c= baden@Mac-mini-Denys.local
+
+  - name: mqtt
+    passwd: "$6$ffr58dRGsd98iyh4$DO.7mGzk8JIHEBaPZUOkYo8WvMu8KB5p0xjB14mFNvyATNPctqUnTIoKZce.ip/.a30r3abvGdfuvmAarHdcu."
+    shell: /bin/bash
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    lock_passwd: false
+
+
+
+runcmd:
+  - ufw allow OpenSSH
+  - ufw allow 80/tcp
+  - ufw allow 443/tcp
+  - ufw allow 3000/tcp
+  - ufw enable
+  - curl -fsSL https://pgp.mongodb.com/server-6.0.asc | gpg -o /usr/share/keyrings/mongodb-server-6.0.gpg --dearmor
+  - echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-6.0.gpg ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+  - curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+  - apt-get update
+  - apt-get install -y gcc g++ make mongodb-org nodejs
