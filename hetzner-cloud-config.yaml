@@ -15,6 +15,7 @@ packages:
   - mosquitto-clients
   - docker.io
   - docker-compose
+  - nginx
 
 groups:
   - docker
@@ -46,3 +47,6 @@ runcmd:
   - curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
   - apt-get update
   - apt-get install -y gcc g++ make mongodb-org nodejs
+  - curl -fsSL https://deno.land/x/install/install.sh | sudo -u baden sh
+  - echo 'export DENO_INSTALL="/home/baden/.deno"' | sudo -u baden tee -a /home/baden/.bashrc
+  - echo 'export PATH="$DENO_INSTALL/bin:$PATH"' | sudo -u baden tee -a /home/baden/.bashrc

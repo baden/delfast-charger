@@ -83,6 +83,11 @@ ssh-keygen -R "91.107.231.166"
 Починаю на NodeJS, але ще треба подумати про Deno.
 
 
+## Авторизація
+
+Авторизацію робимо по відео: https://www.youtube.com/watch?v=v30DUkpgPLk
+
+
 
 ## TODO
 
