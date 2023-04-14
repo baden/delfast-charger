@@ -38,6 +38,12 @@ class Firebase {
     return this.auth.onAuthStateChanged(callback);
   }
 
+  isInitialized() {
+    return new Promise(resolve => {
+      this.auth.onAuthStateChanged(resolve);
+    });
+  }
+
   getCurrentUser() {
     console.log("getCurrentUser", this.auth)
     return this.auth.currentUser;
