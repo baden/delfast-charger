@@ -1,8 +1,5 @@
 import './App.css';
-import {AuthProvider} from './AuthProvider';
-import Nav from './Nav';
 import React, { useState, useEffect } from "react";
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import firebase from './firebase';
 // import { Buffer } from 'buffer';
 // // import mqtt from 'mqtt';
@@ -14,20 +11,20 @@ import useMqtt from './useMqtt';
 
 function App() {
   const [user, setUser] = useState(firebase.getCurrentUser());
-  const [firebaseInitialized, setFirebaseInitialized] = useState(false)
+  // const [firebaseInitialized, setFirebaseInitialized] = useState(false)
 
-  const [client, setClient] = useState(null);
+  // const [client, setClient] = useState(null);
   // const [connectStatus, setConnectStatus] = useState('Disconnected');
 
   const {data, connectStatus} = useMqtt();
 
   console.log("data", data);
 
-  useEffect(() => {
-		firebase.isInitialized().then(val => {
-			setFirebaseInitialized(val)
-		})
-	})
+  // useEffect(() => {
+	// 	firebase.isInitialized().then(val => {
+	// 		setFirebaseInitialized(val)
+	// 	})
+	// })
 
   useEffect(() => {
     const unsubscribe = firebase.onAuthStateChanged((user) => {
