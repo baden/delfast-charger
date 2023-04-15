@@ -30,7 +30,8 @@
     "deploy": "gh-pages -d build",
     "deploy2": "gh-pages -d build -o origin2"
   },
-  "homepage": "http://baden.github.io/delfast-charger",
+  "homepage2": "http://baden.github.io/delfast-charger",
+  "homepage": ".",
   "eslintConfig": {
     "extends": [
       "react-app",

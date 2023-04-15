@@ -10,6 +10,9 @@ packages:
   - curl
   - gnupg-agent
   - software-properties-common
+  - gcc
+  - g++
+  - make
   - ufw
   - mosquitto
   - mosquitto-clients
@@ -34,6 +37,13 @@ users:
     sudo: ALL=(ALL) NOPASSWD:ALL
     lock_passwd: false
 
+write_files:
+  - path: /etc/mosquitto/conf.d/websocket.conf
+    content: |
+      listener 1883
+      listener 9001
+      protocol websockets
+      allow_anonymous true
 
 
 runcmd:
@@ -42,13 +52,17 @@ runcmd:
   - ufw allow 443/tcp
   - ufw allow 3000/tcp
   - ufw allow 1883/tcp
+  - ufw allow 1884/tcp
+  - ufw allow 9001/tcp
+  - ufw allow 9002/tcp
   - ufw allow 27017/tcp
   - ufw enable
   - curl -fsSL https://pgp.mongodb.com/server-6.0.asc | gpg -o /usr/share/keyrings/mongodb-server-6.0.gpg --dearmor
   - echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-6.0.gpg ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-6.0.list
   - curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
   - apt-get update
-  - apt-get install -y gcc g++ make mongodb-org nodejs
+  - apt-get install -y  mongodb-org nodejs
   - curl -fsSL https://deno.land/x/install/install.sh | sudo -u baden sh
   - echo 'export DENO_INSTALL="/home/baden/.deno"' | sudo -u baden tee -a /home/baden/.bashrc
   - echo 'export PATH="$DENO_INSTALL/bin:$PATH"' | sudo -u baden tee -a /home/baden/.bashrc
+  - service mosquitto restart 

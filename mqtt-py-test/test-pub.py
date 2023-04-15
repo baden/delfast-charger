@@ -4,7 +4,7 @@ import json
 
 def myOnConnect(mqtt, userdata, flags, rc):
 	print ("Connected to MQTT with result code: %d" % (rc))
-	mqtt.publish("house/bubl1", "{foo: 42}")
+	# mqtt.publish("house/bubl1", "{foo: 42}")
 
 clientID = "test-pub"
 mqtt = PahoMQTT.Client(client_id="test_cli", clean_session=True,
@@ -13,6 +13,8 @@ mqtt.on_connect = myOnConnect
 
 print ("Connecting to MQTT...")
 mqtt.connect("91.107.231.166", 9001, 60)
+#mqtt.connect("test.mosquitto.org", 8081, 60)
+
 mqtt.loop()
 sleep(2)
 
@@ -47,7 +49,8 @@ while True:
     }
     #, parse_float=lambda x: round(float(x), 3)
     )
-    mqtt.publish("house/bubl1", payload)
+    #mqtt.publish("house/bubl1", payload)
+    mqtt.publish("delfast_charger/id001", payload)
     mqtt.loop()
 
     sleep(1)

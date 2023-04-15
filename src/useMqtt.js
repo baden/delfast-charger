@@ -39,7 +39,7 @@ function useMqtt() {
             onSuccess: () => {
                 console.log('Connected')
                 setConnectStatus('Connected');
-                client.subscribe(`house/#`);
+                client.subscribe(`delfast_charger/id001`);
                 //client.subscribe(`device_data_${gateway}`);
                 //client.subscribe(`card_data_${gateway}`);
                 if(0) {
