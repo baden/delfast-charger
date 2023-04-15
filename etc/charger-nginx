@@ -16,8 +16,6 @@ map $http_upgrade $connection_upgrade {
 }
 
 server {
-    listen   80;
-
     server_name charger.navi.cc;
 
     expires -1; # yes no need caching at all
@@ -67,4 +65,21 @@ server {
         try_files $uri $uri.html $uri/ /index.html;
         access_log /var/log/nginx/delfast-charger/www-access.log charger_log;
     }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/charger.navi.cc/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/charger.navi.cc/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+}
+
+server {
+    if ($host = charger.navi.cc) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+    listen   80;
+
+    server_name charger.navi.cc;
+    return 404; # managed by Certbot
 }

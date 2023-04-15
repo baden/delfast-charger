@@ -94,3 +94,14 @@ ssh-keygen -R "91.107.231.166"
 ## TODO
 
 - Треба налаштувати SSL через letsencrypt.
+
+Перший запуст, мабудь, треба зробити вручну.
+
+```
+sudo certbot --nginx --noninteractive --test-cert --agree-tos --email baden.i.ua@gmail.com -d charger.navi.cc
+```
+
+А для подальшого використання треба якось через 
+```
+certbot certonly --standalone --noninteractive --agree-tos --email baden.i.ua@gmail.com -d charger.navi.cc
+```

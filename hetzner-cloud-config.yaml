@@ -14,6 +14,7 @@ packages:
   - g++
   - make
   - ufw
+  - snapd  # needed for certbot
   - mosquitto
   - mosquitto-clients
   - docker.io
@@ -44,7 +45,78 @@ write_files:
       listener 9001
       protocol websockets
       allow_anonymous true
+  - path: /etc/nginx/sites-available/charger-nginx
+    content: |
+      log_format  charger_log  '$remote_addr - [$time_local] "$request" '
+                        '$status ($body_bytes_sent) "$http_referer" '
+                        '"$http_user_agent" [$request_time $upstream_response_time] 1:$gzip_ratio ($cookie_access_token)';
 
+      # upstream charger_tcp {
+      #     server 127.0.0.1:8001 fail_timeout=0;
+      # }
+
+      upstream charger_ws {
+          server 127.0.0.1:9001 fail_timeout=0;
+      }
+
+      map $http_upgrade $connection_upgrade {
+          default upgrade;
+          ''      close;
+      }
+
+      server {
+          listen   80;
+
+          server_name charger.navi.cc;
+
+          expires -1; # yes no need caching at all
+
+          # API
+          # location /1.0/ {
+          #     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          #     proxy_set_header X-Real-IP  $remote_addr;
+          #     proxy_set_header Host $http_host;
+          #     proxy_set_header X-NginX-Proxy true;
+          #     proxy_redirect off;
+          #     proxy_pass http://charger_api;
+          #     access_log /var/log/nginx/delfast-charger/api-access.log charger_log;
+          # }
+
+          # raw TCP port
+          # location ~* ^/(info|addlog|config|params|firmware|data).* {
+          #     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          #     proxy_set_header X-Real-IP  $remote_addr;
+          #     proxy_set_header Host $http_host;
+          #     proxy_set_header X-NginX-Proxy true;
+          #     proxy_redirect off;
+          #     proxy_pass http://charger_tcp;
+          #     access_log /var/log/nginx/delfast-charger/tcp-access.log charger_log;
+          #     # error_log /home/baden/SDK/newgps.navi.cc/logs/tcp-access.log charger_log;
+          # }
+
+          # Websocket
+          location /mqtt {
+              proxy_pass http://charger_ws;
+              proxy_read_timeout 950s;
+              proxy_http_version 1.1;
+              proxy_set_header Upgrade $http_upgrade;
+              proxy_set_header Connection $connection_upgrade;
+              access_log /var/log/nginx/delfast-charger/ws-access.log charger_log;
+          }
+
+          # WEB
+          root /home/baden/delfast-charger/web;
+          index index.html index.htm;
+          #
+          location / {
+              expires -1; # yes no need caching at all
+              # First attempt to serve request as file, then
+              # as directory, then fall back to index.html
+              #rewrite ^(.*)#.*$ $1;
+              try_files $uri $uri.html $uri/ /index.html;
+              access_log /var/log/nginx/delfast-charger/www-access.log charger_log;
+          }
+      }
 
 runcmd:
   - ufw allow OpenSSH
@@ -65,4 +137,13 @@ runcmd:
   - curl -fsSL https://deno.land/x/install/install.sh | sudo -u baden sh
   - echo 'export DENO_INSTALL="/home/baden/.deno"' | sudo -u baden tee -a /home/baden/.bashrc
   - echo 'export PATH="$DENO_INSTALL/bin:$PATH"' | sudo -u baden tee -a /home/baden/.bashrc
-  - service mosquitto restart 
+  - service mosquitto restart
+  - mkdir -p /var/log/nginx/delfast-charger
+  - chown -R root:adm /var/log/nginx/delfast-charger
+  - unlink /etc/nginx/sites-enabled/default
+  - ln -s /etc/nginx/sites-available/charger-nginx /etc/nginx/sites-enabled/charger-nginx
+  - service nginx restart
+  - snap install core
+  - snap refresh core
+  - sudo snap install --classic certbot
+  - ln -s /snap/bin/certbot /usr/bin/certbot 

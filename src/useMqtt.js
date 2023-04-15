@@ -8,9 +8,14 @@ function useMqtt() {
     const [data, setData] = useState({});
     const [connectStatus, setConnectStatus] = useState('Connecting...');
 
+    // const client = new PahoMQTT.Client(
+    //     "91.107.231.166", // host
+    //     9001, // port  (or 8083 for websockets)
+    //     "web_cli" // client id  
+    // );
     const client = new PahoMQTT.Client(
-        "91.107.231.166", // host
-        9001, // port  (or 8083 for websockets)
+        "charger.navi.cc", // host
+        443, // port  (or 8083 for websockets)
         "web_cli" // client id  
     );
 
@@ -36,6 +41,7 @@ function useMqtt() {
 
         console.log("Connecting....");
         client.connect({
+            useSSL: true,
             onSuccess: () => {
                 console.log('Connected')
                 setConnectStatus('Connected');
