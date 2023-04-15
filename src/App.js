@@ -4,11 +4,27 @@ import Nav from './Nav';
 import React, { useState, useEffect } from "react";
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import firebase from './firebase';
+// import { Buffer } from 'buffer';
+// // import mqtt from 'mqtt';
+// import mqtt from 'paho-mqtt';
+// window.Buffer = Buffer;
+
+import useMqtt from './useMqtt';
+
+console.log("useMqtt", useMqtt);
 
 
 function App() {
   const [user, setUser] = useState(firebase.getCurrentUser());
   const [firebaseInitialized, setFirebaseInitialized] = useState(false)
+
+  const [client, setClient] = useState(null);
+  const [connectStatus, setConnectStatus] = useState('Disconnected');
+
+  const data = useMqtt();
+
+  console.log("data", data);
+
 
   useEffect(() => {
 		firebase.isInitialized().then(val => {
@@ -73,6 +89,15 @@ function App() {
         <div className="flex flex-col justify-center absolute top-12 bottom-0 w-screen bg-red-50 text-center items-center bg-cover">
           <div>Charger: {user.displayName}</div>
           <div>Status: BUSY</div>
+          <div>Time: 00:00:00</div>
+          <div>Cost: 0.00</div>
+          <div>Power: 0.00</div>
+          <div>Energy: 0.00</div>
+          <div>Power Factor: 0.00</div>
+          <div>Current: 0.00</div>
+          <div>Voltage: 0.00</div>
+          <div>Frequency: 0.00</div>
+          <div>MQTT status: {connectStatus} </div>
         </div>
     </div>
   );
