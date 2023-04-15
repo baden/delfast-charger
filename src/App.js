@@ -84,15 +84,14 @@ function App() {
           <div>Charger: {user.displayName}</div>
           <div>Status: BUSY</div>
           <div>Time: 00:00:00</div>
-          <div>Cost: 0.00</div>
-          <div>Power: {data.power}</div>
-          <div>Energy: {data.energy}</div>
-          <div>Power Factor: {data.pf}</div>
-          <div>Current: {data.current}</div>
-          <div>Voltage: {data.voltage}</div>
-          <div>Frequency: {data.freqency}</div>
+          <div>Cost: $0.00</div>
+          <div>Power: {data.power?.toFixed(2)} W</div>
+          <div>Energy: {data.energy?.toFixed(0)} Wh</div>
+          <div>Power Factor: {data.pf?.toFixed(0)}</div>
+          <div>Current: {data.current?.toFixed(3)} A</div>
+          <div>Voltage: {data.voltage?.toFixed(0)} V</div>
+          <div>Frequency: {data.freqency?.toFixed(1)} Hz</div>
           <div>MQTT status: {connectStatus} </div>
-          <div>DATA: {data.power}</div>
         </div>
     </div>
   );
