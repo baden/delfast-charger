@@ -45,7 +45,6 @@ class Firebase {
   }
 
   getCurrentUser() {
-    console.log("getCurrentUser", this.auth)
     return this.auth.currentUser;
     // return null;
   }

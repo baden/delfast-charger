@@ -11,20 +11,17 @@ import firebase from './firebase';
 
 import useMqtt from './useMqtt';
 
-console.log("useMqtt", useMqtt);
-
 
 function App() {
   const [user, setUser] = useState(firebase.getCurrentUser());
   const [firebaseInitialized, setFirebaseInitialized] = useState(false)
 
   const [client, setClient] = useState(null);
-  const [connectStatus, setConnectStatus] = useState('Disconnected');
+  // const [connectStatus, setConnectStatus] = useState('Disconnected');
 
-  const data = useMqtt();
+  const {data, connectStatus} = useMqtt();
 
   console.log("data", data);
-
 
   useEffect(() => {
 		firebase.isInitialized().then(val => {
@@ -34,7 +31,7 @@ function App() {
 
   useEffect(() => {
     const unsubscribe = firebase.onAuthStateChanged((user) => {
-        console.log("onAuthStateChanged", user);
+        // console.log("onAuthStateChanged", user);
         setUser(user);
     });
     return unsubscribe;
@@ -91,13 +88,14 @@ function App() {
           <div>Status: BUSY</div>
           <div>Time: 00:00:00</div>
           <div>Cost: 0.00</div>
-          <div>Power: 0.00</div>
-          <div>Energy: 0.00</div>
-          <div>Power Factor: 0.00</div>
-          <div>Current: 0.00</div>
-          <div>Voltage: 0.00</div>
-          <div>Frequency: 0.00</div>
+          <div>Power: {data.power}</div>
+          <div>Energy: {data.energy}</div>
+          <div>Power Factor: {data.pf}</div>
+          <div>Current: {data.current}</div>
+          <div>Voltage: {data.voltage}</div>
+          <div>Frequency: {data.freqency}</div>
           <div>MQTT status: {connectStatus} </div>
+          <div>DATA: {data.power}</div>
         </div>
     </div>
   );
