@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/delfast-charger/static/css/main.4f10a855.css",
-    "main.js": "/delfast-charger/static/js/main.ff4adb4a.js",
-    "static/js/787.c4e7f8f9.chunk.js": "/delfast-charger/static/js/787.c4e7f8f9.chunk.js",
-    "index.html": "/delfast-charger/index.html",
-    "main.4f10a855.css.map": "/delfast-charger/static/css/main.4f10a855.css.map",
-    "main.ff4adb4a.js.map": "/delfast-charger/static/js/main.ff4adb4a.js.map",
-    "787.c4e7f8f9.chunk.js.map": "/delfast-charger/static/js/787.c4e7f8f9.chunk.js.map"
+    "main.css": "./static/css/main.4f10a855.css",
+    "main.js": "./static/js/main.085757d9.js",
+    "static/js/787.c4e7f8f9.chunk.js": "./static/js/787.c4e7f8f9.chunk.js",
+    "index.html": "./index.html",
+    "main.4f10a855.css.map": "./static/css/main.4f10a855.css.map",
+    "main.085757d9.js.map": "./static/js/main.085757d9.js.map",
+    "787.c4e7f8f9.chunk.js.map": "./static/js/787.c4e7f8f9.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.4f10a855.css",
-    "static/js/main.ff4adb4a.js"
+    "static/js/main.085757d9.js"
   ]
 }
