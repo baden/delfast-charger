@@ -7,7 +7,7 @@ def myOnConnect(mqtt, userdata, flags, rc):
 	# mqtt.publish("house/bubl1", "{foo: 42}")
 
 clientID = "test-pub"
-mqtt = PahoMQTT.Client(client_id="test_cli", clean_session=True,
+mqtt = PahoMQTT.Client(client_id="bot_charger_id001", clean_session=True,
                                          protocol=PahoMQTT.MQTTv311, transport='websockets')
 mqtt.on_connect = myOnConnect
 

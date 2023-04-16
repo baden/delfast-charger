@@ -6,19 +6,36 @@ import firebase from './firebase';
 // import mqtt from 'paho-mqtt';
 // window.Buffer = Buffer;
 
-import useMqtt from './useMqtt';
+//import useMqtt from './useMqtt';
+import MQTTClient from './useMqtt';
+import { useLoaderData } from "react-router-dom";
 
+console.log("MQTTClient", MQTTClient);
+
+const mqttClient = new MQTTClient("charger1");
+
+export async function loader({ params }) {
+  // const contact = await getContact(params.contactId);
+  console.log("App:loader:params", params);
+  const contact = {
+    id: params.id,
+  };
+  return { contact };
+}
 
 function App() {
+  const { contact } = useLoaderData();
+  console.log("App:contact", contact);
+
   const [user, setUser] = useState(firebase.getCurrentUser());
   // const [firebaseInitialized, setFirebaseInitialized] = useState(false)
 
   // const [client, setClient] = useState(null);
   // const [connectStatus, setConnectStatus] = useState('Disconnected');
 
-  const {data, connectStatus} = useMqtt();
+  // const {data, connectStatus, publish} = useMqtt();
 
-  console.log("data", data);
+  // console.log("data", data);
 
   // useEffect(() => {
 	// 	firebase.isInitialized().then(val => {
@@ -26,13 +43,17 @@ function App() {
 	// 	})
 	// })
 
+  const data = {};
+  const connectStatus = 'Disconnected';
+
   useEffect(() => {
+    console.log("---useEffect", user);
     const unsubscribe = firebase.onAuthStateChanged((user) => {
         // console.log("onAuthStateChanged", user);
         setUser(user);
     });
     return unsubscribe;
-  }, []);
+  }, [user]);
 
   const signInUser = () => {
     firebase.signInWithGoogle().then((result) => {
@@ -67,6 +88,12 @@ function App() {
     </div>;
   }
 
+  const startCharging = () => {
+    console.log("startCharging");
+    mqttClient.publish('charger/' + contact.id + '/commands', 'start');
+    // client.publish('charger/1/start', 'start');
+  }
+
   return (
     <div className="App">
       <div className="absolute top-0 left-0 w-screen flex flex-row ml-4 mr-4 text-center items-center justify-center">
@@ -80,14 +107,22 @@ function App() {
       </div>
         {/* <Nav /> */}
         {/* <AuthProvider /> */}
-        <div className="flex flex-col justify-center absolute top-12 bottom-0 w-screen bg-red-50 text-center items-center bg-cover">
-          <div>Charger: {user.displayName}</div>
+        <div className="flex flex-col justify-center absolute top-12 bottom-0 w-screen bg-red-50 text-center items-center bg-cover gap-1">
+          <div>Charger ID: <span className='font-bold'>{contact.id}</span></div>
+          <div>Charger status: <span className='font-bold'>IDLE</span></div>
+
+          <br/>
+          <div>User account balance: <span className='font-bold'>$0.00</span></div>
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Pay by credit card</button>
+
+          <button className="bg-green-800 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onClick={startCharging}>Start charging</button>
+          <br/>
           <div>Status: BUSY</div>
           <div>Time: 00:00:00</div>
           <div>Cost: $0.00</div>
           <div>Power: {data.power?.toFixed(2)} W</div>
           <div>Energy: {data.energy?.toFixed(0)} Wh</div>
-          <div>Power Factor: {data.pf?.toFixed(0)}</div>
+          <div>Power Factor: {data.pf?.toFixed(2)}</div>
           <div>Current: {data.current?.toFixed(3)} A</div>
           <div>Voltage: {data.voltage?.toFixed(0)} V</div>
           <div>Frequency: {data.freqency?.toFixed(1)} Hz</div>
