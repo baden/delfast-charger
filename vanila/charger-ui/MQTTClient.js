@@ -52,6 +52,7 @@ class MQTTClient {
         console.log("Connecting....");
         this.client.connect({
             useSSL: useSSL,
+            // cleanSession: true,
             onSuccess: () => {
                 console.log("Connected");
                 this.connectStatus = 'Connected';

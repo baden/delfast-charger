@@ -1,0 +1,15 @@
+.logout {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 1rem;
+}
+
+.logout img {
+    width: 2rem;
+    height: 2rem;
+    cursor: pointer;
+    display: inline;
+    vertical-align: middle;
+    padding-right: 0.6rem;
+}
