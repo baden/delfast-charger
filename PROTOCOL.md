@@ -195,7 +195,7 @@ P.S.
 
 ## Внутрішні команди
 
-Для __/charger/commands__ (G), та __/charger/$id/commands__ (L) є набір команд для сервісного використання:
+Для __charger/commands__ (G), та __charger/$id/commands__ (L) є набір команд для сервісного використання:
 
 Можливо буде додано щось на кшталт __$API_SERVICE_KEY:$commad[:$params]__:
 
