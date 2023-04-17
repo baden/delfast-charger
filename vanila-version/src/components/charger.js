@@ -76,12 +76,26 @@ export const charger_status_ready = (element, id, user, auth, mqttClient) => {
 }
 
 
-export const charger_status_busy = (element, id, user, auth, mqttClient) => {
+export const charger_status_busy = (element, id, user, auth, mqttClient, data) => {
   // const connectUser = (event) => {
   //   console.log("User connected to charger");
   //   mqttClient.publish(`charger/${id}/commands`, `connect:${user.uid}`);
   // }
+  const stopCharging = (event) => {
+    console.log("Stop charging");
+    mqttClient.publish(`charger/${id}/commands`, `stop:${user.uid}`);
+  };
+  // PZEM-004T
+  const compact_measures = (data) => {
+    return `
+      <span>U:${(data.voltage||0.0).toFixed(0)}V</span>
+      <span>I:${((data.current||0.0)/1000).toFixed(3)}A</span>
+      <span>P:${(data.power||0.0).toFixed(0)}W</span>
+      <span>E:${(data.energy||0.0).toFixed(0)}Wh</span>
+    `;
+  };
   workingPage(element, id, user, auth, mqttClient, `
+    <div class="compact_measures">${compact_measures(data)}</div>
     <h3>Початок роботи.</h3>
     <ul>
       <li>Відкрийте дверцята</li>
@@ -92,8 +106,8 @@ export const charger_status_busy = (element, id, user, auth, mqttClient) => {
     </ul>
     <div>Ви можете припинити заряджання у будь яку мить.</div>
     <button id="stop_charging">Припинити заряджання</button>
-
   `);
+  element.querySelector('#stop_charging').addEventListener('click', stopCharging);
   // element.querySelector('#start_charging').addEventListener('click', connectUser);
 }
 

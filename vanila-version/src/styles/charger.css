@@ -54,6 +54,14 @@ img.giphy {
     object-fit: cover;
 }
 
+.compact_measures {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+}
 
 .lds-ellipsis {
     display: inline-block;

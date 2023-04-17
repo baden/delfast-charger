@@ -31,7 +31,7 @@ const chargerPage = (element, id, user, auth, mqttClient) => {
         charger_status_ready(element, id, user, auth, mqttClient);
         break;
       case "busy":
-        charger_status_busy(element, id, user, auth, mqttClient);
+        charger_status_busy(element, id, user, auth, mqttClient, data);
         break;
       case "charging":
         charger_status_charging(element, id, user, auth, mqttClient, data);
