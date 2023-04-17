@@ -25,10 +25,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Install Dependencies
-        working_directory: vanila-version
+        working-directory: ./vanila-version
         run: npm i
       - name: Build
-        working_directory: vanila-version
+        working-directory: ./vanila-version
         run: npm run build
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4.4.1
