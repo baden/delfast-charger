@@ -1382,16 +1382,17 @@ var Fn=Object.defineProperty;var Vn=(n,e,t)=>e in n?Fn(n,e,{enumerable:!0,config
                 <span>Поповнити рахунок</span>
             </button>
         </div>
-    `},Ke=(n,e,t,i,r,s)=>{n.innerHTML=`
+    `},Do=`
+  <div>
+    <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+  </div>
+`,Ke=(n,e,t,i,r,s)=>{n.innerHTML=`
     <div class="charger">
         <div class="logout top-right-a"></div>
         <img src="${yt}" class="logo" alt="Vite logo" />
         <h2>Вітаю, ${t.displayName}!</h2>
         <div id="balance">Loading...</div>
-        ${s}
-        <div>
-          <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-        </div>
+        ${s}        
       </div>
   `,Ln(document.querySelector(".logout"),i),Po(document.querySelector("#balance"))},Un=(n,e,t,i,r,s)=>{n.innerHTML=`
     <div class="header">
@@ -1403,10 +1404,10 @@ var Fn=Object.defineProperty;var Vn=(n,e,t)=>e in n?Fn(n,e,{enumerable:!0,config
     <div class="charger">
         ${s}
       </div>
-  `,Ln(document.querySelector(".logout"),i)},Do=(n,e,t,i,r)=>{Ke(n,e,t,i,r,"Очікую відповідь від станції заряджання...")},Oo=(n,e,t,i,r)=>{Ke(n,e,t,i,r,"Станція заряджання не відповідає. Зверніться до технічної підтримки. Або скористйтесь іншою станцією заряджання.")},Lo=(n,e,t,i,r)=>{Ke(n,e,t,i,r,"Станція заряджання завантажується...")},Uo=(n,e,t,i,r)=>{const s=c=>{console.log("User connected to charger"),r.publish(`charger/${e}/commands`,`connect:${t.uid}`)};Ke(n,e,t,i,r,`
+  `,Ln(document.querySelector(".logout"),i)},Oo=(n,e,t,i,r)=>{Ke(n,e,t,i,r,`<div>Очікую відповідь від станції заряджання...</div>${Do}`)},Lo=(n,e,t,i,r)=>{Ke(n,e,t,i,r,"Станція заряджання не відповідає. Зверніться до технічної підтримки. Або скористйтесь іншою станцією заряджання.")},Uo=(n,e,t,i,r)=>{Ke(n,e,t,i,r,"Станція заряджання завантажується...")},xo=(n,e,t,i,r)=>{const s=c=>{console.log("User connected to charger"),r.publish(`charger/${e}/commands`,`connect:${t.uid}`)};Ke(n,e,t,i,r,`
     <div>Станція заряджання вільна.</div>
     <button id="start_charging">Розпочати роботу з зарядною станцією</button>
-  `),n.querySelector("#start_charging").addEventListener("click",s)},xo=(n,e,t,i,r)=>{Un(n,e,t,i,r,`
+  `),n.querySelector("#start_charging").addEventListener("click",s)},Bo=(n,e,t,i,r)=>{Un(n,e,t,i,r,`
     <h3>Початок роботи.</h3>
     <ul>
       <li>Відкрийте дверцята</li>
@@ -1418,7 +1419,7 @@ var Fn=Object.defineProperty;var Vn=(n,e,t)=>e in n?Fn(n,e,{enumerable:!0,config
     <div>Ви можете припинити заряджання у будь яку мить.</div>
     <button id="stop_charging">Припинити заряджання</button>
 
-  `)},Bo=(n,e,t,i,r,s)=>{var u,p,I,h;const c=k=>{console.log("User connected to charger"),r.publish(`charger/${e}/commands`,`stop:${t.uid}`)};Un(n,e,t,i,r,`
+  `)},Fo=(n,e,t,i,r,s)=>{var u,p,I,h;const c=k=>{console.log("User connected to charger"),r.publish(`charger/${e}/commands`,`stop:${t.uid}`)};Un(n,e,t,i,r,`
     <div>
       <img src="${Ro}" class="giphy" alt="Giphy logo" />
       <div>Триває заряджання...</div>
@@ -1439,6 +1440,6 @@ var Fn=Object.defineProperty;var Vn=(n,e,t)=>e in n?Fn(n,e,{enumerable:!0,config
         Припинити заряджання
       </button>
     </div>
-  `),n.querySelector("#stop_charging").addEventListener("click",c)},Fo=(n,e,t,i)=>{n.innerHTML=`
+  `),n.querySelector("#stop_charging").addEventListener("click",c)},Vo=(n,e,t,i)=>{n.innerHTML=`
     Стан станції заряджання невідомий. Зверніться до технічної підтримки.
-  `},Vo=(n,e,t,i,r)=>{const s=t.uid;console.log("---- uid=",s),console.log("charger=",Co);let c=setTimeout(()=>{Oo(n,e,t,i,r)},15e3);r.onMessageArrived=u=>{switch(console.log("onMessageArrived",u),clearTimeout(c),u.status){case"init":Lo(n,e,t,i,r);break;case"ready":Uo(n,e,t,i,r);break;case"busy":xo(n,e,t,i,r);break;case"charging":Bo(n,e,t,i,r,u);break;default:Fo(n)}},Do(n,e,t,i,r)},$o=document.getElementById("app"),qo=n=>{if(console.log("App:element",n),!ue)return To(n);const e=new yo,t=new wo("charger_"+ue);t.onMQTTConnect=()=>{console.log("onMQTTConnect"),t.subscribe("charger/"+ue+"/status"),t.subscribe("charger/"+ue+"/data");const i=e.getCurrentUser();i&&t.publish("charger/"+ue+"/commands",`hello:${i.uid}`)},t.onMQTTLost=()=>{console.log("onMQTTLost. TODO: reconnect")},e.onAuthStateChanged(i=>(console.log("user=",i),i?(t.connect(),Vo(n,ue,i,e,t)):(t.disconnect(),So(n,e))))};qo($o);
+  `},$o=(n,e,t,i,r)=>{const s=t.uid;console.log("---- uid=",s),console.log("charger=",Co);let c=setTimeout(()=>{Lo(n,e,t,i,r)},15e3);r.onMessageArrived=u=>{switch(console.log("onMessageArrived",u),clearTimeout(c),u.status){case"init":Uo(n,e,t,i,r);break;case"ready":xo(n,e,t,i,r);break;case"busy":Bo(n,e,t,i,r);break;case"charging":Fo(n,e,t,i,r,u);break;default:Vo(n)}},Oo(n,e,t,i,r)},qo=document.getElementById("app"),Ho=n=>{if(console.log("App:element",n),!ue)return To(n);const e=new yo,t=new wo("charger_"+ue);t.onMQTTConnect=()=>{console.log("onMQTTConnect"),t.subscribe("charger/"+ue+"/status"),t.subscribe("charger/"+ue+"/data");const i=e.getCurrentUser();i&&t.publish("charger/"+ue+"/commands",`hello:${i.uid}`)},t.onMQTTLost=()=>{console.log("onMQTTLost. TODO: reconnect")},e.onAuthStateChanged(i=>(console.log("user=",i),i?(t.connect(),$o(n,ue,i,e,t)):(t.disconnect(),So(n,e))))};Ho(qo);
