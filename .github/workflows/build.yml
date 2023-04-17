@@ -25,13 +25,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Install Dependencies
-        run: |
-          npm i
+        run:
+          command: npm i
+          working_directory: vanila-version
       - name: Build
-        run: npm run build
+        run:
+          command: npm run build
+          working_directory: vanila-version
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4.4.1
         with:
-          folder: ./build
+          folder: ./vanila-version/dist
           branch: gh-pages
       - run: echo "🍏 This job's status is ${{ job.status }}."
