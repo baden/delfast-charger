@@ -30,6 +30,8 @@ class MQTTClient {
     connect = () => {
         const host = "charger.navi.cc";
         const port = 443;
+        //const host = "incharge.one";
+        //const port = 443;
         const clientId = "web_" + this.id;
         const useSSL = true;
         const timeout = 3;

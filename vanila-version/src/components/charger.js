@@ -6,6 +6,12 @@ import logoutElement from '../components/logout'
 import balanceElement from '../components/balance'
 import viteLogo from '/vite.svg'
 
+const loader = `
+  <div>
+    <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+  </div>
+`;
+
 const bigWelcomePage = (element, id, user, auth, mqttClient, text) => {
   element.innerHTML = `
     <div class="charger">
@@ -13,10 +19,7 @@ const bigWelcomePage = (element, id, user, auth, mqttClient, text) => {
         <img src="${viteLogo}" class="logo" alt="Vite logo" />
         <h2>Вітаю, ${user.displayName}!</h2>
         <div id="balance">Loading...</div>
-        ${text}
-        <div>
-          <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-        </div>
+        ${text}        
       </div>
   `
 
@@ -46,7 +49,7 @@ const workingPage = (element, id, user, auth, mqttClient, text) => {
 
 export const charger_status_initial = (element, id, user, auth, mqttClient) => {
   bigWelcomePage(element, id, user, auth, mqttClient,
-    "Очікую відповідь від станції заряджання..."
+    `<div>Очікую відповідь від станції заряджання...</div>${loader}`
   );
 }
 
