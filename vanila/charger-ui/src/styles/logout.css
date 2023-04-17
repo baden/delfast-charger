@@ -1,8 +1,23 @@
 .logout {
+    /* position: absolute; 
+    top: 0;
+    right: 0;*/
+    margin: 4px;
+    /* margin: 1rem; */
+}
+
+.top-right-a {
     position: absolute;
     top: 0;
     right: 0;
-    margin: 1rem;
+}
+
+.p-6 {
+    padding: 0.4rem;
+}
+
+.p-6 button {
+    padding: 0.3rem;
 }
 
 .logout img {

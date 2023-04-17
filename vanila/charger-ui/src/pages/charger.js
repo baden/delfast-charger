@@ -1,29 +1,47 @@
-import viteLogo from '/vite.svg'
-import logoutElement from '../components/logout'
-import balanceElement from '../components/balance'
-import chargerElement from '../components/charger'
 import charger from '../hooks/charger'
+import {
+  charger_status_initial,
+  charger_status_error_timeout,
+  charger_status_init,
+  charger_status_ready,
+  charger_status_busy,
+  charger_status_charging,
+  charger_status_unknown,
+} from '../components/charger'
 
-
-const chargerPage = (element, user, auth, mqttClient) => {
+const chargerPage = (element, id, user, auth, mqttClient) => {
   // User is signed in, see docs for a list of available properties
   // https://firebase.google.com/docs/reference/js/firebase.User
   const uid = user.uid;
-  console.log("uid=", uid);
+  console.log("---- uid=", uid);
   console.log("charger=", charger);
-  
-  element.innerHTML = `
-  <div class="charger">
-      <div id="logout"></div>
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-      <h2>Вітаю, ${user.displayName}!</h2>
-      <div id="balance">Loading...</div>
-      <div id="charger_control">Loading...</div>
-  </div>
-  `;
-  logoutElement(document.querySelector('#logout'), auth);
-  balanceElement(document.querySelector('#balance'), auth, mqttClient);
-  chargerElement(document.querySelector('#charger_control'), auth, mqttClient);
+
+  let initial_timeout = setTimeout(() => {
+    charger_status_error_timeout(element, id, user, auth, mqttClient);
+  }, 15000);
+
+  mqttClient.onMessageArrived = (data) => {
+    console.log("onMessageArrived", data);
+    clearTimeout(initial_timeout);
+    switch(data.status) {
+      case "init":
+        charger_status_init(element, id, user, auth, mqttClient);
+        break;
+      case "ready":
+        charger_status_ready(element, id, user, auth, mqttClient);
+        break;
+      case "busy":
+        charger_status_busy(element, id, user, auth, mqttClient);
+        break;
+      case "charging":
+        charger_status_charging(element, id, user, auth, mqttClient, data);
+        break;
+      default:
+        charger_status_unknown(element, id, user, auth, mqttClient);
+    }
+  }
+
+  charger_status_initial(element, id, user, auth, mqttClient);
 
 }
 

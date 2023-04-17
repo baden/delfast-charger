@@ -29,10 +29,7 @@ const setupApp = (element) => {
     }
   } 
   mqttClient.onMQTTLost = () => {
-    console.log("onMQTTLost");
-  }
-  mqttClient.onMessageArrived = (data) => {
-    console.log("onMessageArrived", data);
+    console.log("onMQTTLost. TODO: reconnect");
   }
 
   auth.onAuthStateChanged((user) => {
@@ -40,7 +37,7 @@ const setupApp = (element) => {
     if (user) {
       mqttClient.connect();
 
-      return chargerPage(element, user, auth, mqttClient);
+      return chargerPage(element, id, user, auth, mqttClient);
 
       // ...
     } else {

@@ -13,11 +13,11 @@ const firebaseConfig = {
   };
 
 const app = initializeApp(firebaseConfig);
-console.log("firebase app=", app);
+// console.log("firebase app=", app);
 const auth = getAuth(app);
-console.log("firebase auth=", auth);
+// console.log("firebase auth=", auth);
 const googleProvider = new GoogleAuthProvider();
-console.log("firebase provider=", googleProvider);
+// console.log("firebase provider=", googleProvider);
 
 export default class Auth {
     constructor() {

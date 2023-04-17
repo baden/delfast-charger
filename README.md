@@ -93,7 +93,7 @@ ssh-keygen -R "91.107.231.166"
 
 Для відлагодження, або для демонстраціі, на сервері треба запустити бота.
 
-![](charger-id001.png)
+<img src="Charger_hash_id001.png" alt= “” width="300px">
 
 ## TODO
 

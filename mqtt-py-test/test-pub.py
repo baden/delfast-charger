@@ -30,6 +30,8 @@ energy = 0
 frequency = 50
 pf = 0.99
 
+time = 0
+
 while True:
     print("publishing")
 
@@ -38,8 +40,12 @@ while True:
     power = voltage * current * pf
     energy += 1
     frequency = 50.1*2 - frequency
+    time += 1
 
     payload = json.dumps({
+        "status": "charging",
+        "uid": "lDpl3b3d21Ma0vUBoMYdJuoOsVI3",
+        "time": time,
         "voltage": voltage,
         "current": current,
         "power": power,
@@ -50,7 +56,7 @@ while True:
     #, parse_float=lambda x: round(float(x), 3)
     )
     #mqtt.publish("house/bubl1", payload)
-    mqtt.publish("delfast_charger/id001", payload)
+    mqtt.publish("charger/id001/status", payload)
     mqtt.loop()
 
     sleep(1)
