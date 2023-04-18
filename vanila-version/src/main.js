@@ -35,6 +35,7 @@ const setupApp = (element) => {
   auth.onAuthStateChanged((user) => {
     console.log("user=", user);
     if (user) {
+      mqttClient.id = "charger_" + id + "_" + user.uid;
       mqttClient.connect();
 
       return chargerPage(element, id, user, auth, mqttClient);
