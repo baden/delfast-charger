@@ -18,7 +18,7 @@ charger/$id/$uid/status (?)
 ```json
 {
     "status": "ready",
-    "doors_closed": true,
+    "doors_opened": false,
     "out_active": false
 }
 ```
@@ -30,6 +30,7 @@ charger/$id/$uid/status (?)
 ```json
 {
     "status": "busy",
+    "doors_opened": false,
     "uid": "$uid",
     ...
 }
