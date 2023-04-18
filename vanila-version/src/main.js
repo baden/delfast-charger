@@ -6,6 +6,7 @@ import id from './id.js'
 import page404 from './components/404'
 import loginPage from './components/login'
 import chargerPage from './pages/charger'
+import {page_lost_connection} from './components/errors'
 
 const document_root = document.getElementById('app');
 
@@ -30,6 +31,7 @@ const setupApp = (element) => {
   } 
   mqttClient.onMQTTLost = () => {
     console.log("onMQTTLost. TODO: reconnect");
+    return page_lost_connection(element);
   }
 
   auth.onAuthStateChanged((user) => {
