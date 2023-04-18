@@ -5,6 +5,8 @@ import stopImage from '/stop.svg'
 import logoutElement from '../components/logout'
 import balanceElement from '../components/balance'
 import viteLogo from '/vite.svg'
+import doorOpenedImage from '/door_opened.svg'
+import doorClosedImage from '/door_closed.svg'
 
 const loader = `
   <div>
@@ -87,11 +89,15 @@ export const charger_status_busy = (element, id, user, auth, mqttClient, data) =
   };
   // PZEM-004T
   const compact_measures = (data) => {
+    const doorIcon = (data?.doors_opened)
+      ? `<img src="${doorOpenedImage}" class="small" alt="Door opened" />`
+      : `<img src="${doorClosedImage}" class="small" alt="Door closed" />`;
     return `
-      <span>U:${(data.voltage||0.0).toFixed(0)}V</span>
-      <span>I:${((data.current||0.0)/1000).toFixed(3)}A</span>
-      <span>P:${(data.power||0.0).toFixed(0)}W</span>
-      <span>E:${(data.energy||0.0).toFixed(0)}Wh</span>
+      <span>U:<b>${(data.voltage||0.0).toFixed(0)}</b>V</span>
+      <span>I:<b>${((data.current||0.0)/1000).toFixed(3)}</b>A</span>
+      <span>P:<b>${(data.power||0.0).toFixed(0)}</b>W</span>
+      <span>E:<b>${(data.energy||0.0).toFixed(0)}</b>Wh</span>
+      <span>${doorIcon}</span>
     `;
   };
   workingPage(element, id, user, auth, mqttClient, `
