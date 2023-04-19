@@ -9,7 +9,7 @@ export const offPage = (element, off_reason) => {
   element.innerHTML = `
     <div class="charger">
       <img src="${viteLogo}" class="logo" alt="Vite logo" />
-      <h2>Вибачте, але зарядна вимкнена.</h2>
+      <h2>Вибачте, але зарядна станція вимкнена.</h2>
       <div>Оберіть іншу зарядну станцію.</div>
       <br/>
       <div style="text-align: left">

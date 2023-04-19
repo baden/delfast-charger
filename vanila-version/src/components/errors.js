@@ -29,3 +29,13 @@ export const page_hw_error = (element, error_code, error_reason) => {
     </div>
   `;
 };
+
+export const usedByOtherUser = (element) => {
+  element.innerHTML = `
+    <div class="charger">
+      <img src="${viteLogo}" class="logo" alt="Vite logo" />
+      <h2>Зарядна станція використовується іншим користувачем.</h2>
+      <div>Оберіть іншу зарядну станцію.</div>
+    </div>
+  `;
+};

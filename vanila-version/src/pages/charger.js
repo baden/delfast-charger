@@ -11,6 +11,7 @@ import {
 import { page_hw_error } from '../components/errors'
 import { offPage } from '../components/off' 
 import { maintenancePage } from '../components/maintenance'
+import { usedByOtherUser } from '../components/errors'
 
 const chargerPage = (element, id, user, auth, mqttClient) => {
   // User is signed in, see docs for a list of available properties
@@ -26,6 +27,10 @@ const chargerPage = (element, id, user, auth, mqttClient) => {
   mqttClient.onMessageArrived = (data) => {
     console.log("onMessageArrived", data);
     clearTimeout(initial_timeout);
+    // if data has uid, check if it is the same as current user
+    if (data.uid && data.uid !== uid) {
+      return usedByOtherUser(element);
+    }
     switch(data.status) {
       case "init":
         charger_status_init(element, id, user, auth, mqttClient);
