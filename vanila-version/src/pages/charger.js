@@ -6,6 +6,7 @@ import {
   charger_status_ready,
   charger_status_busy,
   charger_status_charging,
+  charger_status_done,
   charger_status_unknown,
 } from '../components/charger'
 import { page_hw_error } from '../components/errors'
@@ -44,6 +45,9 @@ const chargerPage = (element, id, user, auth, mqttClient) => {
       case "charging":
         charger_status_charging(element, id, user, auth, mqttClient, data);
         break;
+      case "done":
+        charger_status_done(element, id, user, auth, mqttClient, data);
+        break;  
       case "error":
         page_hw_error(element, data.code, data.reason);
         break;

@@ -150,6 +150,31 @@ export const charger_status_charging = (element, id, user, auth, mqttClient, dat
 }
 
 
+export const charger_status_done = (element, id, user, auth, mqttClient, data) => {
+  // const stopCharging = (event) => {
+  //   console.log("User connected to charger");
+  //   mqttClient.publish(`charger/${id}/commands`, `stop:${user.uid}`);
+  // };
+
+  workingPage(element, id, user, auth, mqttClient, `
+    <div>
+      <h2>Заряджання завершено.</h2>
+    </div>
+    <div>
+      <div><span>Спожито: </span><span id="energy">${data.energy?.toFixed(0)}</span> <span>Wh</span></div>
+    </div>
+    <div>
+      <div><span>Час заряджання: </span><span id="time">${((data.time||0.0)/60.0).toFixed(0)}</span> <span>хв</span></div>
+    </div>
+    <div>
+      Закрийте дверцята.
+    </div>
+  `);
+
+  element.querySelector('#stop_charging').addEventListener('click', stopCharging);
+}
+
+
 export const charger_status_unknown = (element, user, auth, mqttClient) => {
   element.innerHTML = `
     Стан станції заряджання невідомий. Зверніться до технічної підтримки.
