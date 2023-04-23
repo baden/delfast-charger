@@ -1,0 +1,8 @@
+#!/bin/sh
+
+TOKEN=eyIRIBFE9Xqhx1JrXhMAWD:APA91bEBQnuFlM03rjHmqsBa9UlB0BfdEm8tvjqHqGESwKHMgMyNAoOV4tQ0rrIGx8AIcSLPw7q4ToJVydK6CgexySkmmUpDkeCs0pjEPRfXIyALyJBRar8oYpxXBaypZbIMOBhX8ML8
+AUTH_KEY=AAAAIgAKguQ:APA91bHBBIfosx3AiF6kIVaV1hTgvgGB5ePRbTWgDjBylkR4ThoZ55GUG75k5BfLUXAWpbIjDMspAGCabU1hdsgDENwn92GRSb11AlC54EoErsuh-zTrqqhunA6OAvfDK3Mro3ehgcvG
+
+
+echo "Testing push over Google Cloud Messaging"
+curl 

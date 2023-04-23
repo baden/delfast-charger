@@ -1,20 +1,24 @@
 import { initializeApp } from 'firebase/app'
 import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, } from "firebase/auth"
-
+import { getMessaging, getToken, onMessage} from "firebase/messaging"
+import firebaseConfig from './firebase-config.js'
 
 // Your web app's Firebase configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyC0UMDhVLTX_lhPBdqU3BnHSg6z126F-_o",
-    authDomain: "delfast-chargger-auth.firebaseapp.com",
-    projectId: "delfast-chargger-auth",
-    storageBucket: "delfast-chargger-auth.appspot.com",
-    messagingSenderId: "146029576932",
-    appId: "1:146029576932:web:ed75929b80ef941c11e2f1"
-  };
+
 
 const app = initializeApp(firebaseConfig);
 // console.log("firebase app=", app);
 const auth = getAuth(app);
+
+const messaging = getMessaging(app);
+// console.log("firebase messaging=", messaging);
+onMessage(messaging, (payload) => {
+  console.log('>>>> Message received. ', payload);
+  // ...
+});
+
+// Add the public key generated from the console here.
+
 // console.log("firebase auth=", auth);
 const googleProvider = new GoogleAuthProvider();
 // console.log("firebase provider=", googleProvider);
@@ -23,6 +27,7 @@ export default class Auth {
     constructor() {
         this.auth = auth;
         this.googleProvider = googleProvider;
+        this.token = null;
     }
 
     signInWithGoogle() {
@@ -47,5 +52,38 @@ export default class Auth {
         return this.auth.currentUser;
         // return null;
     }
+
+    requestPermission() {
+        Notification.requestPermission().then((permission) => {
+            if (permission === 'granted') {
+                console.log('Notification permission granted.');
+                // TODO(developer): Retrieve a registration token for use with FCM.
+                // ...
+
+                getToken(messaging, {vapidKey: "BAk7JkHVy1Kwi5p_a-bYZCWE6YQYfJKBEpoYJJBTa5QAw4lxfbnLYkNRZMagQOMqukAkmEumO8-VR9sNGOAmtZs"})
+                .then((currentToken) => {
+                    if (currentToken) {
+                        console.log("currentToken=", currentToken);
+                        // Send the token to your server and update the UI if necessary
+                        // ...
+                        this.token = currentToken;
+                    } else {
+                        // Show permission request UI
+                        console.error("No registration token available. Request permission to generate one.");
+                        // ...
+                    }
+                })
+                .catch((err) => {
+                    console.error("An error occurred while retrieving token. ", err);
+                });
+            
+
+            } else {
+                console.log('Unable to get permission to notify.');
+                // alert("Unable to get permission to notify. Please allow notifications in your browser settings.");
+            }
+        });
+    }
+
 }
 

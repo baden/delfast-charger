@@ -6,6 +6,7 @@ import {
   charger_status_ready,
   charger_status_busy,
   charger_status_charging,
+  charger_status_completed,
   charger_status_done,
   charger_status_unknown,
 } from '../components/charger'
@@ -26,7 +27,7 @@ const chargerPage = (element, id, user, auth, mqttClient) => {
   }, 15000);
 
   mqttClient.onMessageArrived = (data) => {
-    console.log("onMessageArrived", data);
+    // console.log("onMessageArrived", data);
     clearTimeout(initial_timeout);
     // if data has uid, check if it is the same as current user
     if (data.uid && data.uid !== uid) {
@@ -44,6 +45,9 @@ const chargerPage = (element, id, user, auth, mqttClient) => {
         break;
       case "charging":
         charger_status_charging(element, id, user, auth, mqttClient, data);
+        break;
+      case "completed":
+        charger_status_completed(element, id, user, auth, mqttClient, data);
         break;
       case "done":
         charger_status_done(element, id, user, auth, mqttClient, data);

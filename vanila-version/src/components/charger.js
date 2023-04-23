@@ -69,6 +69,9 @@ export const charger_status_ready = (element, id, user, auth, mqttClient) => {
   const connectUser = (event) => {
     console.log("User connected to charger");
     mqttClient.publish(`charger/${id}/commands`, `connect:${user.uid}`);
+    // save token
+    mqttClient.publish(`charger/${id}/commands`, `token:${auth.token}`);
+    mqttClient.publish(`charger/${id}/commands`, `url:${location.href}`);
   }
   bigWelcomePage(element, id, user, auth, mqttClient, `
     <div>Станція заряджання вільна.</div>
@@ -150,6 +153,40 @@ export const charger_status_charging = (element, id, user, auth, mqttClient, dat
 }
 
 
+export const charger_status_completed = (element, id, user, auth, mqttClient, data) => {
+  const stopCharging = (event) => {
+    console.log("User connected to charger");
+    mqttClient.publish(`charger/${id}/commands`, `stop:${user.uid}`);
+  };
+
+  workingPage(element, id, user, auth, mqttClient, `
+    <div>
+      <h2>Ваш прилад зарядився.</h2>
+    </div>
+    <div>
+      <div><span>Напруга: </span><span id="voltage">${data.voltage.toFixed(0)}</span> <span>В</span></div>
+      <div><span>Струм: </span><span id="current">${data.current?.toFixed(3)}</span> <span>A</span></div>
+      <div><span>Потужність: </span><span id="power">${data.power?.toFixed(1)}</span> <span>W</span></div>
+      <div><span>pf: </span><span id="pf">${data.pf?.toFixed(2)}</span> <span>%</span></div>
+      <div><span>Спожито: </span><span id="energy">${data.energy?.toFixed(0)}</span> <span>Wh</span></div>
+    </div>
+    <div>
+      <div><span>Час заряджання: </span><span id="time">${((data.time||0.0)/60.0).toFixed(0)}</span> <span>хв</span></div>
+    </div>
+    <div>
+      <button id="stop_charging">
+        <img src="${stopImage}" class="stop" alt="Stop logo" />
+        Відімкнути замок дверцят.
+      </button>
+    </div>
+  `);
+
+  element.querySelector('#stop_charging').addEventListener('click', stopCharging);
+}
+
+
+
+
 export const charger_status_done = (element, id, user, auth, mqttClient, data) => {
   // const stopCharging = (event) => {
   //   console.log("User connected to charger");
@@ -171,7 +208,7 @@ export const charger_status_done = (element, id, user, auth, mqttClient, data) =
     </div>
   `);
 
-  element.querySelector('#stop_charging').addEventListener('click', stopCharging);
+  // element.querySelector('#stop_charging').addEventListener('click', stopCharging);
 }
 
 

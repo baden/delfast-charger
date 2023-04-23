@@ -17,6 +17,8 @@ const setupApp = (element) => {
     return page404(element);
   }
   const auth = new Auth();
+  auth.requestPermission();
+  // auth.getToken();
   
   const mqttClient = new MQTTClient("charger_" + id);
   mqttClient.onMQTTConnect = () => {

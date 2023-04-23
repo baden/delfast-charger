@@ -10,5 +10,6 @@ SERVER_PATH=/home/$SERVER_USER/delfast-charger/web
 
 npm install
 npm run build
+npm run build-sw
 ssh $SERVER_USER@${SERVER_IP} "mkdir -p $SERVER_PATH"
 rsync -a --delete -e ssh ./dist/ root@${SERVER_IP}:$SERVER_PATH

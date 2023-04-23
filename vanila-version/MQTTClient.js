@@ -32,7 +32,7 @@ class MQTTClient {
         // const port = 443;
         const host = "incharge.one";
         const port = 443;
-        const clientId = "web_" + this.id;
+        const clientId = `web_${location.hostname}_${this.id}`;
         const useSSL = true;
         const timeout = 3;
 
@@ -40,8 +40,8 @@ class MQTTClient {
         this.client.onConnectionLost = this.onConnectionLost;
 
         this.client.onMessageArrived = (message) => {
-            console.log("onMessageArrived", message);
             try {
+                console.log("onMessageArrived", message.payloadString);
                 this.data = JSON.parse(message.payloadString)
                 if(this.onMessageArrived) {
                     this.onMessageArrived(this.data);
