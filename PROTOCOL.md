@@ -18,9 +18,13 @@ charger/$id/status
 {
     "status": "ready",
     "doors_opened": false,
-    "out_active": false
+    "out_active": false,
+    "common_energy": 100,
 }
 ```
+
+Значення потужності common_power у ватгодинах (вимірюються з кроком 0.5Вт*г).
+
 
 (або інший свій наявний статус).
 Якшо зарядна станція знаходиться у статусі виконання (busy, charging, etc), статус буде мати
@@ -31,6 +35,7 @@ charger/$id/status
     "status": "busy",
     "doors_opened": false,
     "uid": "$uid",
+    "common_energy": 100,
     ...
 }
 ```
@@ -51,8 +56,8 @@ charger/$id/status
 'Зарядна станція не відповідає. Зачекайте декілька хвилин. Якшо помилка не зникне, зверніться в технічну підтримку.'
 ```
 
-Після того як кліент натиснув кнопку 'Відкрити зарядну станцію', додаток посилає повідомлення
-'connect:$uid' у топік __charger/$id/commands__
+Після того як кліент натиснув кнопку 'Відкрити зарядну станцію, aбо активувати розетку 110V', додаток посилає повідомлення
+'connect:$uid:config_string' у топік __charger/$id/commands__
 Зарядна станція відімкне дверцята (подає 2 секунди сигнал на вихід TurnL, активує струм у розетку) і,
 пошле у топік __charger/$id/status__ новий статус 'busy'.
 
@@ -60,7 +65,9 @@ charger/$id/status
 {
     "status": "busy",
     "uid": "$uid",
+    "common_energy": 100,
     "time": 0,
+    "pause_time": 0,
     "voltage": $voltage,
     "current": $current,
     "power": $power,
@@ -69,6 +76,19 @@ charger/$id/status
     "pf": $pf
 }
 ```
+
+Формат **config_string**.
+Параметри передаються чезез подільник ':'.
+Перелік параметрів:
+
+параметр | Опис
+-----|------------------------------------------------------------
+B<N> | Вибір бабіни. B0 - вибір режиму 110В, B1...B4 - бабіни 1..4
+U<v> | Напруга блока живлення. Контролер контролює напругу перед активацією | бабіни (B1...B4). При виборі B0 цей параметр ігнорується, або його можна не передавати.
+P<n> | Конфігурація параметрів регульованого блока живлення. n - десятичне значення, двоїчна форма відповідає комбінації виходів регулювання блока живлення. P1=42V,2A; P3=42V,3A; P7=54.6V,2A; P15=54.6V,3A; P14=58.8V;3A; P0=0V,0A
+
+
+
 
 З цього моменту, значення time буде зростати на 1 кожну секунду.
 ~~З цього моменту зарядна станція буде сприймати тільки команди з вказаним __$uid__, інші буде ігнорувати.~~
@@ -80,8 +100,11 @@ __charger/$id/status__.
     {
         "status": "charging",
         "uid": "$uid",
+        "common_energy": 100,
         "time": $time,
+        "pause_time": 0,
         "voltage": $voltage,
+        "dc_voltage": $voltage,
         "current": $current,
         "power": $power,
         "energy": $energy,
@@ -101,6 +124,31 @@ __charger/$id/status__.
 Через 10 хвилин і надалі, зарядна станція посилає пакети раз на 60 секунд, або одразу, якшо міняєтся її стан (струм споживання
 впаде нижче 10% від максимального рівня - завершення заряджання), або користувач припинив зарядку.
 
+Процес заряджання може бути призупинен передачею команди "pause:$uid" у топік __charger/$id/commands__.
+
+```json
+    {
+        "status": "paused",
+        "uid": "$uid",
+        "common_energy": 100,
+        "time": $time,
+        "pause_time": $pause_time,
+        "voltage": $voltage,
+        "dc_voltage": $voltage,
+        "current": $current,
+        "power": $power,
+        "energy": $energy,
+        "frequency": $frequency,
+        "pf": $pf
+    }
+```
+
+Зарядна станція вимикає напругу з портів заряджання.
+З цього моменту, значення __pause_time__ буде зростати на 1 кожну секунду.
+
+Продовжити процес заряджання можна передавши команду "continue:$uid" у топік __charger/$id/commands__.
+Або можна припинити заряджання командою "stop:$uid" (див. далі).
+
 Коли рівень заряджання впаде нижче 10%, то додаток видає повідомлення шо заряджання завершено.
 Зарядна станція переходить у стан 'completed', передає його у __charger/$id/status__.
 
@@ -108,8 +156,11 @@ __charger/$id/status__.
     {
         "status": "completed",
         "uid": "$uid",
+        "common_energy": 100,
         "time": $time,
+        "pause_time": $pause_time,
         "voltage": $voltage,
+        "dc_voltage": $voltage,
         "current": $current,
         "power": $power,
         "energy": $energy,
@@ -141,8 +192,11 @@ charging_time_secs * V1 + energy_Wh * V2
     {
         "status": "done",
         "uid": "lDpl3b3d21Ma0vUBoMYdJuoOsVI3",
+        "common_energy": 100,
         "time": $time,
+        "pause_time": $pause_time,
         "voltage": $voltage,
+        "dc_voltage": $voltage,
         "current": $current,
         "power": $power,
         "energy": $energy,
@@ -193,7 +247,8 @@ P.S.
 {
     "status": "error",
     "code": $errorcode,
-    "reason": "Text comment if it possible"
+    "reason": "Text comment if it possible",
+    "common_energy": 100
 }
 ```
 
