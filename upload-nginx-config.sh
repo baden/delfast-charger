@@ -1,6 +1,6 @@
 #!/bin/sh
 
-SERVER_IP=91.107.231.166
+SERVER_IP=`hcloud server ip delfast-charger`
 SERVER_USER=root
 
 ssh $SERVER_USER@${SERVER_IP} "mkdir -p /var/log/nginx/delfast-charger/"

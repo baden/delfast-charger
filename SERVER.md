@@ -95,3 +95,9 @@ certbot certonly --standalone --noninteractive --agree-tos --email baden.i.ua@gm
 ```
 
 Але після налаштування DNS.
+
+
+## Відкриваємо сторінку:
+
+https://charger.navi.cc/#868822042309565
+

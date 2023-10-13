@@ -20,6 +20,7 @@ packages:
   - docker.io
   - docker-compose
   - nginx
+  - mc
 
 groups:
   - docker

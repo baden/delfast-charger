@@ -1,6 +1,6 @@
 #!/bin/sh
 
-SERVER_IP=91.107.231.166
+SERVER_IP=`hcloud server ip delfast-charger`
 SERVER_USER=baden
 
 SERVER_PATH=/home/$SERVER_USER/delfast-charger/web

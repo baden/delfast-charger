@@ -68,7 +68,13 @@ export const charger_status_init = (element, id, user, auth, mqttClient) => {
 export const charger_status_ready = (element, id, user, auth, mqttClient) => {
   const connectUser = (event) => {
     console.log("User connected to charger");
-    mqttClient.publish(`charger/${id}/commands`, `connect:${user.uid}`);
+    const config = 'B0:U54.6:P7';
+    if(config && config !== '') {
+      mqttClient.publish(`charger/${id}/commands`, `connect:${user.uid}:${config}`);
+    } else {
+      mqttClient.publish(`charger/${id}/commands`, `connect:${user.uid}`);
+    }
+
     // save token
     mqttClient.publish(`charger/${id}/commands`, `token:${auth.token}`);
     mqttClient.publish(`charger/${id}/commands`, `url:${location.href}`);
