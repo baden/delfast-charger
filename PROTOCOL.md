@@ -119,7 +119,7 @@ __charger/$id/status__.
 ```
 
 Значення струму передаються у мілліамперах.
-Значення напруги у вольтах.
+Значення напруги у мілівольтах.
 Значення потужності у ватах (вимірюються у 0.1Вт).
 Значення споживання у ват х годинах.
 Значення power factor у відсотках.
@@ -201,7 +201,6 @@ charging_time_secs * V1 + energy_Wh * V2
         "time": $time,
         "pause_time": $pause_time,
         "voltage": $voltage,
-        "dc_voltage": $voltage,
         "current": $current,
         "power": $power,
         "energy": $energy,
